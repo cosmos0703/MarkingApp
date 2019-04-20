@@ -30,12 +30,23 @@ namespace MarkingApp.Services.Implementations.Storage
             _blobClient = account.CreateCloudBlobClient();
         }
 
-        public async Task<string> SaveFileAsync(string storageKey, string path, string mimeType)
+        public async Task<string> SaveFileAsync(string container, string path, string mimeType)
         {
             using (var stream = new FileStream(path, FileMode.OpenOrCreate))
             {
-                return await SaveFileAsync(storageKey, stream, path, mimeType);
+                return await SaveFileAsync(container, stream, path, mimeType);
             }
+        }
+
+        public async Task<Stream> GetFileAsync(string container, string id)
+        {
+            var blobContainer = PrepareBlob(container);
+            var blob = blobContainer.GetBlockBlobReference(id);
+            var stream = new MemoryStream();
+            await blob.DownloadToStreamAsync(stream);
+            stream.Seek(0,
+                SeekOrigin.Begin);
+            return stream;
         }
 
         private async Task<string> SaveFileAsync(string blobName, Stream stream, string path, string mimeType)

@@ -12,6 +12,8 @@ namespace MarkingApp.Core.Services.Implementations
 {
     public class ImageService : IImageService
     {
+        private const string UploadContainer = "uploads";
+
         private readonly IStorageService _storageService;
 
         private static readonly string[] ImageContentTypes = { "image/png", "image/jpeg", "image/jpg" };
@@ -40,6 +42,14 @@ namespace MarkingApp.Core.Services.Implementations
             var file = form.Files.First();
             var imagePath = await RetreiveAndSaveImage(file);
             return await _storageService.SaveFileAsync("uploads", imagePath, file.ContentType);
+        }
+
+        public async Task<string> ProcessImageAsync(string imageName)
+        {
+            using (var data = await _storageService.GetFileAsync(UploadContainer, imageName))
+            {
+                return data.Length.ToString();
+            }
         }
 
         private static async Task<string> RetreiveAndSaveImage(IFormFile file)

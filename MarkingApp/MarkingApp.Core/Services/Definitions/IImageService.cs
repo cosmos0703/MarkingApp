@@ -9,5 +9,7 @@ namespace MarkingApp.Core.Services.Definitions
     public interface IImageService
     {
         Task<string> UploadImageAsync(HttpRequest request);
+
+        Task<string> ProcessImageAsync(string imageName);
     }
 }

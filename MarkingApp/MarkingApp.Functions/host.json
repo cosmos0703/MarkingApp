@@ -1,4 +1,7 @@
 {
     "version": "2.0",
-    "functions": [ "ImageUploadFunction" ]
+    "functions": [
+        "ImageUploadFunction",
+        "ImageProcessFunction"
+    ]
 }

@@ -27,5 +27,16 @@ namespace MarkingApp.Functions
             var url = await imageService.UploadImageAsync(req);
             return new OkObjectResult(url);
         }
+
+        [FunctionName(nameof(ImageProcessFunction))]
+        public static async Task<IActionResult> ImageProcessFunction(
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/image/process")] HttpRequest req,
+            [Inject]IImageService imageService,
+            ILogger log)
+        {
+            var id = req.Query["name"];
+            var url = await imageService.ProcessImageAsync(id);
+            return new OkObjectResult(url);
+        }
     }
 }
