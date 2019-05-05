@@ -9,5 +9,9 @@
     "bin": true
   },
   "azureFunctions.pythonVenv": ".env",
-  "debug.internalConsoleOptions": "neverOpen"
+  "debug.internalConsoleOptions": "neverOpen",
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintArgs": [
+  ]
 }

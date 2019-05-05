@@ -1,9 +1,12 @@
-import logging
+#pylint: disable=relative-beyond-top-level
+import logging, tempfile
 import azure.functions as func
-from marking_app_python.services import AzureStorageService
+from ..Shared.Services import AzureStorageService
+from io import BytesIO
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     storage = AzureStorageService()
     id = req.params.get("id")
-    a = storage.get_file("uploads", id)
-    return func.HttpResponse("{0}".format(a))
+    with tempfile.NamedTemporaryFile('wb') as tmp:
+        data = storage.get_blob_file("uploads", id, tmp)
+        return func.HttpResponse("{0}".format(data))
