@@ -1,7 +1,7 @@
 from ..Core import BaseStorageService
 from azure.storage.blob import BlockBlobService
 from io import BytesIO
-import os, sys, tempfile
+import os, tempfile
 
 class AzureStorageService(BaseStorageService):
 
@@ -17,11 +17,16 @@ class AzureStorageService(BaseStorageService):
         self.block_blob_service.get_blob_to_stream(container, id, stream)
         return stream
     
-    def get_blob_file(self, container: str, id: str, file: tempfile.NamedTemporaryFile):
-        with BytesIO() as stream:
-            self.get_blob_stream(container, id, stream)
-            stream.seek(0)
-            file.write(stream.getbuffer())
+    def get_blob_file(self, container: str, id: str):
+        
+        file_extension = os.path.splitext(id)[1]
+        with tempfile.NamedTemporaryFile('wb', suffix=file_extension, delete=False) as tmp:
+            with BytesIO() as stream:
+                self.get_blob_stream(container, id, stream)
+                stream.seek(0)
+                tmp.write(stream.getbuffer())
+                tmp.flush()
+                return tmp.name
 
     def prepare_blob(self, name):
         if self.block_blob_service.exists(container_name=name):

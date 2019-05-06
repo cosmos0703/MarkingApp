@@ -1,1 +1,2 @@
 from .azure_storage_service import AzureStorageService
+from .opencv_image_processor import OpenCVImageProcessor

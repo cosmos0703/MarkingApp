@@ -1,1 +1,2 @@
 from .base_storage_service import BaseStorageService
+from .base_image_processor import BaseImageProcessor
