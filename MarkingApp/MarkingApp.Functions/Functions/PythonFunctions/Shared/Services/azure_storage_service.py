@@ -17,10 +17,9 @@ class AzureStorageService(BaseStorageService):
         self.block_blob_service.get_blob_to_stream(container, id, stream)
         return stream
     
-    def get_blob_file(self, container: str, id: str):
-        
+    def get_blob_file(self, container: str, id: str, dir: str):
         file_extension = os.path.splitext(id)[1]
-        with tempfile.NamedTemporaryFile('wb', suffix=file_extension, delete=False) as tmp:
+        with tempfile.NamedTemporaryFile('wb', dir= dir, suffix=file_extension, delete=False) as tmp:
             with BytesIO() as stream:
                 self.get_blob_stream(container, id, stream)
                 stream.seek(0)

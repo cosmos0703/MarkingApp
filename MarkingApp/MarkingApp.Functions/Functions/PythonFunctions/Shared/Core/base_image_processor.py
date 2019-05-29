@@ -3,5 +3,5 @@ import abc
 class BaseImageProcessor(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def threshold_and_invert(self, path: str):
+    def extract_questions(self, dir: str, file: str):
         raise NotImplementedError

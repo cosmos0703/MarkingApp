@@ -9,7 +9,8 @@ from io import BytesIO
 def main(req: func.HttpRequest) -> func.HttpResponse:
     storage = AzureStorageService()
     id = req.params.get("id")
-    filepath = storage.get_blob_file("uploads", id)
-    processor = OpenCVImageProcessor()
-    processor.threshold_and_invert(filepath)
-    return func.HttpResponse("{0}".format(filepath))
+    with tempfile.TemporaryDirectory(prefix="!") as dirpath:
+        filepath = storage.get_blob_file("uploads", id, dirpath)
+        processor = OpenCVImageProcessor()
+        processor.extract_questions(dirpath, filepath)
+        return func.HttpResponse("{0}".format(filepath))
